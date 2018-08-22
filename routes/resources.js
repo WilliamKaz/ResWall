@@ -5,6 +5,10 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
+  router.get("/", (req, res) => {
+    // render all resources
+  });
+
   router.get("/new", (req, res) => {
     // render the create resource page
   });
