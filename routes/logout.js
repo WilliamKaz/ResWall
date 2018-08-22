@@ -4,9 +4,10 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = () => {
-
-  router.get("/logout", (req, res) => {
-    // logout user
+  // after the user logs out, redirect to the resources page and clear cookie
+  router.post("/logout", (req, res) => {
+    // req.session = null;
+    // res.redirect("/resources/");
   });
 
   return router;
