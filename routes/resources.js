@@ -7,13 +7,15 @@ module.exports = (knex) => {
 
   router.get("/", (req, res) => {
     // render all resources
+    res.render("/resources/");
   });
 
   router.get("/new", (req, res) => {
     // render the create resource page
+    res.render("/resources_new/");
   });
 
-  router.post("/:id", (req, res) => {
+  router.post("/new", (req, res) => {
     // submit the create resource form
   });
 
