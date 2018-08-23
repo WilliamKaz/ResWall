@@ -1,3 +1,5 @@
+"use strict";
+
 require('dotenv').config();
 
 const knex = require('knex')({
@@ -12,13 +14,51 @@ const knex = require('knex')({
   },
 });
 
-knex.select().from('users').then(function(result){console.log(result)});
 
-knex('users').insert({
-  username: 'jim',
-  password: '123',
-  email: 'jim@email.com',
-  bio: 'I\'m Jim, people don\'t like me'
-}).then(()=>{});
+module.exports = function makeDataHelpers(knex) {
+  return {
 
-knex.select().from('users').then(function(result){console.log(result)});
+    createUser: (username, password, email, bio) => {
+      knex('users').insert({
+        username,
+        password,
+        email,
+        bio
+      }).then(()=>{});
+    },
+
+    checkCredentials: (email, password) => {
+      knex('users').count('email')
+      .where('email', email)
+      .then((result) => {return (result[0].count === '1')})
+      .catch((err)=>{console.log(err)});
+    },
+
+    getUserId: (email) => {
+      knex.select('id').from('users')
+      .where('email', email)
+      .then((result)=>{return (result[0].id)})
+      .catch((err)=>{console.log(err)});
+    },
+
+    saveTweet: function(newTweet, callback) {
+      db.collection("tweets").insertOne(newTweet, (err) => {
+        callback(err);
+      });
+    },
+
+    saveTweet: function(newTweet, callback) {
+      db.collection("tweets").insertOne(newTweet, (err) => {
+        callback(err);
+      });
+    },
+
+    getTweets: function(callback) {
+      const sortNewestFirst = (a, b) => b.created_at - a.created_at;
+      db.collection("tweets").find().toArray( (err, array) => {
+        callback(err, array.sort(sortNewestFirst));
+      });
+    }
+
+  };
+}
