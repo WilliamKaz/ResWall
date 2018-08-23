@@ -1,18 +1,24 @@
 "use strict";
 
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 
 module.exports = (knex) => {
 
-  // redirect to the home page
+  // if no query string, redirect to the home page, else render search page with results
   router.get("/", (req, res) => {
-    res.redirect("/index");
+    if (req.query.keyword = '') {
+      res.redirect("index");
+    } else {
+      const searchTerm = req.query.keyword;
+      const searchResult = searchResources(searchTerm);
+      res.render("search_result", searchResult);
+    }
   });
 
   // render the create resource page
   router.get("/new", (req, res) => {
-    res.render("/resources_new");
+    res.render("resources_new");
   });
 
   // submit the create resource form
@@ -24,28 +30,51 @@ module.exports = (knex) => {
     const topic_id = req.session.topic_id;
 
     createResource(url, title, description, user_id, topic_id);
-    res.redirect("/index");
+    res.redirect("index");
   });
 
+  // render the edit resource page
+  router.get("/:id", (req, res) => {
+    const resource_id = req.params.id;
+    const resource = getResource(resource_id);
+    res.render("resource", resource);
+  });
+
+  // submit the edit resource form
   router.put("/:id", (req, res) => {
-    // updateResource(resourceId, url, title, description, topic_id) 
+    const resource_id = req.params.id;
+    const url = req.body.url;
+    const title = req.body.title;
+    const description = req.body.description;
+    const topic_id = req.body.topic_id;
+    updateResource(resourceId, url, title, description, topic_id);
+    const resource = getResource(resource_id);
+    res.render("resource", resource);
   });
 
+  // delete resource and redirect to the home page
   router.delete("/:id", (req, res) => {
-    // delete resource
+    const resource_id = req.params.id;
+    deleteResource(resource_id)
+    res.redirect("index");
   });
 
-  // router.get("?search=’search bar text’", (req, res) => {
-    // search resource by title, topic or user
-  // });
-
+  // display all comments
   router.get("/:id/comments", (req, res) => {
-    // display all comments
+    const resource_id = req.params.id;
+    const comments = getComments(resource_id);
+    res.render("index", comments);
   });
 
+  // submit comment
   router.post("/:id/comments", (req, res) => {
-    // submit comment
+    const resource_id = req.params.id;
+    const user_id = req.session.user_id;
+    const message = req.body.message;
+    createComment(message, user_id, resource_id);
+    const comments = getComments(resource_id);
+    res.render("index", comments);
   });
-
+  
   return router;
 }
