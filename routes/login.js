@@ -4,14 +4,31 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = () => {
-
+  // render the login page
   router.get("/login", (req, res) => {
-    // display the login page
+    res.render("/login");
   });
 
+  // submit login form
   router.post("/login", (req, res) => {
-    // submit login form
-  });
+    const email = req.body.email;
+    const password = req.body.password;
+    const user_id = getUserId(email);
 
+    // check email and pw against db
+    if (checkCredentials(email, password) === true) {
+      // logic to be written by Jordan
+      // db[userId].email === email && bcrypt.compareSync(password, db[UserId].hashedPassword)
+
+      // set cookie and redirect to home page
+      req.session.user_id = user_id;
+      res.redirect("/index");
+    } else {
+      // render login page with error message
+      const errorLog = {};
+      errorLog.error = 'Invalid Credentials';
+      res.status(403).render("/login", errorLog);
+    }
+  });
   return router;
 }

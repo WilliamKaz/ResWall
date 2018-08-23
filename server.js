@@ -6,6 +6,7 @@ const PORT        = process.env.PORT || 8080;
 const ENV         = process.env.ENV || "development";
 const express     = require("express");
 const bodyParser  = require("body-parser");
+const cookieSession = require('cookie-session');
 const sass        = require("node-sass-middleware");
 const app         = express();
 
@@ -15,6 +16,10 @@ const morgan      = require('morgan');
 const knexLogger  = require('knex-logger');
 
 // Seperated Routes for each Resource
+const loginRoutes = require("./routes/login");
+const logoutRoutes = require("./routes/logout");
+const registerRoutes = require("./routes/register");
+const resourcesRoutes = require("./routes/resources");
 const usersRoutes = require("./routes/users");
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
@@ -35,12 +40,22 @@ app.use("/styles", sass({
 }));
 app.use(express.static("public"));
 
+// cookie session
+app.use(cookieSession({
+  name: 'session',
+  keys: ['user_id']
+}));
+
 // Mount all resource routes
-app.use("/api/users", usersRoutes(knex));
+app.use("/login", loginRoutes());
+app.use("/logout", logoutRoutes());
+app.use("/register", registerRoutes());
+app.use("/resources", resourcesRoutes());
+app.use("/users", usersRoutes());
 
 // Home page
 app.get("/", (req, res) => {
-  res.render("index");
+  res.redirect("/index");
 });
 
 app.listen(PORT, () => {
