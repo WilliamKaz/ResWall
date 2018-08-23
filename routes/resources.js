@@ -7,12 +7,12 @@ module.exports = (knex) => {
 
   router.get("/", (req, res) => {
     // render all resources
-    res.render("/resources/");
+    res.render("/index");
   });
 
   router.get("/new", (req, res) => {
     // render the create resource page
-    res.render("/resources_new/");
+    res.render("/resources_new");
   });
 
   router.post("/new", (req, res) => {

@@ -4,22 +4,32 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = () => {
-  
   // render the login page
   router.get("/login", (req, res) => {
-    res.render("/login/");
+    res.render("/login");
   });
 
   // submit login form
   router.post("/login", (req, res) => {
     // check if username exists in the database, if yes, check if user/pw from HTML matches the database, if user/pw match db
 
-    req.body.email
+    const email = req.body.email;
+    const password = req.body.password;
+    const userId = getUserId(email);
 
-    // set cookie session and redirect to resources page
-    // req.session.user_id = TBD;
-    // res.redirect("/resources");
+    if (checkCredentials(email, password) === true) {
+      // logic to be written by Jordan
+      // db[userId].email === email && bcrypt.compareSync(password, db[UserId].hashedPassword)
+
+      // set cookie and redirect to home page
+      req.session.userId = userId;
+      res.redirect("/index");
+    } else {
+      // render login page with error message
+      const errorLog = {};
+      errorLog.error = 'Invalid Credentials';
+      res.status(403).render("/login", errorLog);
+    }
   });
-
   return router;
 }
