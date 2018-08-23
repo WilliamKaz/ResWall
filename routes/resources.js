@@ -35,9 +35,9 @@ module.exports = (knex) => {
     // delete resource
   });
 
-  router.get("?search=’search bar text’", (req, res) => {
+  // router.get("?search=’search bar text’", (req, res) => {
     // search resource by title, topic or user
-  });
+  // });
 
   router.get("/:id/comments", (req, res) => {
     // display all comments
