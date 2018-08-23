@@ -5,9 +5,15 @@ const router = express.Router();
 
 module.exports = (knex) => {
 
-  // redirect to the home page
+  // if no query string, redirect to the home page, else render search page with results
   router.get("/", (req, res) => {
-    res.redirect("index");
+    if (req.query.keyword = '') {
+      res.redirect("index");
+    } else {
+      const searchTerm = req.query.keyword;
+      const searchResult = searchResources(searchTerm);
+      res.render("search_result", searchResult);
+    }
   });
 
   // render the create resource page
@@ -69,10 +75,6 @@ module.exports = (knex) => {
     const comments = getComments(resource_id);
     res.render("index", comments);
   });
-
-
-  // router.get("?search=’search bar text’", (req, res) => {
-  // search resource by title, topic or user
-  // });
+  
   return router;
 }
