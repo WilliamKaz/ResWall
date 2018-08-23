@@ -20,7 +20,7 @@ module.exports = (knex) => {
     const url = req.body.url;
     const title = req.body.title;
     const description = req.body.description;
-    const user_id = req.session.userId;
+    const user_id = req.session.user_id;
     const topic_id = req.session.topic_id;
 
     createResource(url, title, description, user_id, topic_id);
@@ -28,7 +28,7 @@ module.exports = (knex) => {
   });
 
   router.put("/:id", (req, res) => {
-    // update resource
+    // updateResource(resourceId, url, title, description, topic_id) 
   });
 
   router.delete("/:id", (req, res) => {

@@ -13,7 +13,7 @@ module.exports = () => {
   router.post("/login", (req, res) => {
     const email = req.body.email;
     const password = req.body.password;
-    const userId = getUserId(email);
+    const user_id = getUserId(email);
 
     // check email and pw against db
     if (checkCredentials(email, password) === true) {
@@ -21,7 +21,7 @@ module.exports = () => {
       // db[userId].email === email && bcrypt.compareSync(password, db[UserId].hashedPassword)
 
       // set cookie and redirect to home page
-      req.session.userId = userId;
+      req.session.user_id = user_id;
       res.redirect("/index");
     } else {
       // render login page with error message

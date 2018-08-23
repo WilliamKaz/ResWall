@@ -43,7 +43,7 @@ app.use(express.static("public"));
 // cookie session
 app.use(cookieSession({
   name: 'session',
-  keys: ['userId']
+  keys: ['user_id']
 }));
 
 // Mount all resource routes

@@ -21,9 +21,9 @@ module.exports = () => {
 
     // create user in db and get the user id
     createUser(username, password, email, bio);
-    const userId = getUserId(email);
+    const user_id = getUserId(email);
 
-    req.session.userId = userId;
+    req.session.user_id = user_id;
     res.redirect("/index");
   });
 
