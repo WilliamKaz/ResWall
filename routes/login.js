@@ -11,12 +11,11 @@ module.exports = () => {
 
   // submit login form
   router.post("/login", (req, res) => {
-    // check if username exists in the database, if yes, check if user/pw from HTML matches the database, if user/pw match db
-
     const email = req.body.email;
     const password = req.body.password;
     const userId = getUserId(email);
 
+    // check email and pw against db
     if (checkCredentials(email, password) === true) {
       // logic to be written by Jordan
       // db[userId].email === email && bcrypt.compareSync(password, db[UserId].hashedPassword)
