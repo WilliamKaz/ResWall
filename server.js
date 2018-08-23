@@ -56,8 +56,8 @@ app.use("/users", usersRoutes());
 
 // Home page
 app.get("/", (req, res) => {
-  const resource = getAllResources();
-  res.render("index", resource);
+  // const resource = getAllResources();
+  res.render("index");
 });
 
 app.listen(PORT, () => {

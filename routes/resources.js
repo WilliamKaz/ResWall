@@ -18,19 +18,19 @@ module.exports = (knex) => {
 
   // render the create resource page
   router.get("/new", (req, res) => {
-    res.render("resources_new");
+    res.render("postForm");
   });
 
   // submit the create resource form
   router.post("/new", (req, res) => {
-    const url = req.body.url;
+    const url = req.body.resURL;
     const title = req.body.title;
     const description = req.body.description;
     const user_id = req.session.user_id;
-    const topic_id = req.session.topic_id;
+    const topic_id = req.body.topic;
 
-    createResource(url, title, description, user_id, topic_id);
-    res.redirect("index");
+    // createResource(url, title, description, user_id, topic_id);
+    res.redirect("/");
   });
 
   // render the edit resource page
