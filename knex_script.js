@@ -13,15 +13,30 @@ const knex = require('knex')({
     ssl      : process.env.DB_SSL
   },
 });
-const test = async function () {
+const test = async function (query) {
   return await
-  knex.select().from('resources')
-  .where('user_id', 1);
-
+  knex.select('resources.id').from('resources')
+  .join('users', 'users.id', '=', 'resources.user_id')
+  .join('topics', 'topics.id', '=', 'resources.topic_id')
+  .where('username', 'ilike', query)
+  .orWhere('topics.name', 'ilike', query)
+  .orWhere('resources.title', 'ilike', query)
+  .then((result) => {
+    const idArray = [];
+    result.forEach((object) => {
+      idArray.push(object.id);
+    })
+    return idArray;
+  })
+  .then(async (idArr) => {
+    return await
+    knex.select().from('resources')
+    .whereIn('id', idArr)               ////unsorted still
+  })
 };
 
 (async function() {
-  console.log(await test());
+  console.log(await test('alice'));
 }());
 
 
@@ -69,21 +84,21 @@ module.exports = function makeDataHelpers(knex) {
       return await
       knex('users').count('email')
       .where('email', email)
-      .then((result) => {return (result[0].count === '1')});
+      .then((result) => {return result[0].count === '1'});
     },
 
     getUserId: async (email) => {
       return await
       knex.select('id').from('users')
       .where('email', email)
-      .then((result) => {return (result[0].id)})
+      .then((result) => {return result[0].id})
     },
 
     getProfile: async (user_id) => {
       return await
       knex.select('username', 'bio').from('users')
       .where('id', user_id)
-      .then((result) => {return (result[0])});
+      .then((result) => {return result[0]});
     },
 
     updateProfile: async (user_id, bio) => {
@@ -99,11 +114,105 @@ module.exports = function makeDataHelpers(knex) {
       .where('user_id', user_id);  ///unsorted still
     },
 
-    getTweets: function(callback) {
-      const sortNewestFirst = (a, b) => b.created_at - a.created_at;
-      db.collection("tweets").find().toArray( (err, array) => {
-        callback(err, array.sort(sortNewestFirst));
+    getMyLikes: async (user_id) => {
+      return await
+      knex.select('resource_id').from('likes')
+      .where('user_id', user_id)
+      .then((result) => {
+        const idArray = [];
+        result.forEach((object) => {
+          idArray.push(object.resource_id);
+        });
+        return idArray;
+      })
+      .then(async (idArr) => {
+        return await
+        knex.select().from('resources')
+        .whereIn('id', idArr);        ///unsorted still
       });
+    },
+
+    createResource: async (url, title, description, user_id, topic_id) => {
+      return await
+      knex('resources').insert({
+        url,
+        title,
+        description,
+        user_id,
+        topic_id
+      });
+    },
+
+    getAllResources: async () => {
+      return await
+      knex.select().from('resources');   ////unsorted still
+    },
+
+    deleteResource: async (resource_id) => {
+      const foreigns = Promise.all([
+        knex('ratings')
+        .where('resource_id', resource_id)
+        .del()
+        .then((num) => {console.log(num, 'ratings deleted')}),
+
+        knex('likes')
+        .where('resource_id', resource_id)
+        .del()
+        .then((num) => {console.log(num, 'likes deleted')}),
+
+        knex('comments')
+        .where('resource_id', resource_id)
+        .del()
+        .then((num) => {console.log(num, 'comments deleted')}),
+      ]);
+
+      foreigns.then((result) => {
+        knex('resources')
+        .where('id', resource_id)
+        .del()
+        .then((num) => {console.log(num, 'resources deleted')});
+      })
+    },
+
+    getResource: async (resource_id) => {
+      return await
+      knex.select().from('resources')
+      .where('id', resource_id)
+      .then((result) => {return result[0]});
+    },
+
+    updateResource: async (resource_id, url, title, description, topic_id) => {
+      return await
+      knex('resources')
+      .where('id', resource_id)
+      .update({
+        url,
+        title,
+        description,
+        topic_id
+      });
+    },
+
+    searchResources: async (query) => {
+      return await
+      knex.select('resources.id').from('resources')
+      .join('users', 'users.id', '=', 'resources.user_id')
+      .join('topics', 'topics.id', '=', 'resources.topic_id')
+      .where('username', 'ilike', query)
+      .orWhere('topics.name', 'ilike', query)
+      .orWhere('resources.title', 'ilike', query)
+      .then((result) => {
+        const idArray = [];
+        result.forEach((object) => {
+          idArray.push(object.id);
+        })
+        return idArray;
+      })
+      .then(async (idArr) => {
+        return await
+        knex.select().from('resources')
+        .whereIn('id', idArr)               ////unsorted still
+      })
     }
 
   };
