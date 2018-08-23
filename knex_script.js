@@ -13,3 +13,12 @@ const knex = require('knex')({
 });
 
 knex.select().from('users').then(function(result){console.log(result)});
+
+knex('users').insert({
+  username: 'jim',
+  password: '123',
+  email: 'jim@email.com',
+  bio: 'I\'m Jim, people don\'t like me'
+}).then(()=>{});
+
+knex.select().from('users').then(function(result){console.log(result)});
