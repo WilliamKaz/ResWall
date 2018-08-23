@@ -5,18 +5,26 @@ const router  = express.Router();
 
 module.exports = (knex) => {
 
+  // redirect to the home page
   router.get("/", (req, res) => {
-    // render all resources
-    res.render("/index");
+    res.redirect("/index");
   });
 
+  // render the create resource page
   router.get("/new", (req, res) => {
-    // render the create resource page
     res.render("/resources_new");
   });
 
+  // submit the create resource form
   router.post("/new", (req, res) => {
-    // submit the create resource form
+    const url = req.body.url;
+    const title = req.body.title;
+    const description = req.body.description;
+    const user_id = req.session.userId;
+    const topic_id = req.session.topic_id;
+
+    createResource(url, title, description, user_id, topic_id);
+    res.redirect("/index");
   });
 
   router.put("/:id", (req, res) => {
