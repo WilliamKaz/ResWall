@@ -1,4 +1,3 @@
-
 function createPost(resource) {
   const postTemplate = `
     <div class="post">
@@ -53,7 +52,7 @@ function createPost(resource) {
     <div class="postFooter">
       <div class="controls clearfix">
         <p class="show">Show Comments</p>
-        <p class="hide">Hide Comments</p>
+        <p  class="hide">Hide Comments</p>
       </div>
       <div class="commentContainer">
         <div class="commentForm">
@@ -89,6 +88,3 @@ function loadPosts() {
 $(document).ready(function () {
   loadPosts();
 });
-
-
-
