@@ -44,13 +44,15 @@ module.exports = function makeDataHelpers(knex) {
     getMyResources: async (user_id) => {
       return await
       knex.select().from('resources')
-      .where('user_id', user_id);  ///unsorted still
+      .where('user_id', user_id)
+      .orderBy('created_at', 'desc');
     },
 
     getMyLikes: async (user_id) => {
       return await
       knex.select('resource_id').from('likes')
       .where('user_id', user_id)
+      .orderBy('created_at', 'desc')
       .then((result) => {
         const idArray = [];
         result.forEach((object) => {
@@ -61,7 +63,7 @@ module.exports = function makeDataHelpers(knex) {
       .then(async (idArr) => {
         return await
         knex.select().from('resources')
-        .whereIn('id', idArr);        ///unsorted still
+        .whereIn('id', idArr);
       });
     },
 
@@ -78,7 +80,8 @@ module.exports = function makeDataHelpers(knex) {
 
     getAllResources: async () => {
       return await
-      knex.select().from('resources');   ////unsorted still
+      knex.select().from('resources')
+      .orderBy('created_at', 'desc');
     },
 
     deleteResource: async (resource_id) => {
@@ -145,7 +148,8 @@ module.exports = function makeDataHelpers(knex) {
       .then(async (idArr) => {
         return await
         knex.select().from('resources')
-        .whereIn('id', idArr)               ////unsorted still
+        .whereIn('id', idArr)
+        .orderBy('created_at', 'desc')
       })
     },
 
@@ -161,7 +165,8 @@ module.exports = function makeDataHelpers(knex) {
     getComments: async (resource_id) => {
       return await
       knex.select().from('comments')
-      .where('resource_id', resource_id);   ////unsorted still
+      .where('resource_id', resource_id)
+      .orderBy('created_at', 'desc');
     },
 
     likeExists: async (user_id, resource_id) => {
