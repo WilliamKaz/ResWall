@@ -21,6 +21,7 @@ exports.seed = function(knex, Promise) {
       password: 'asdf',
       email: 'charlie@email.com',
       bio: 'Hello, my name is Charlie!'
-    })
+    }),
+    knex.raw('ALTER SEQUENCE users_id_seq RESTART WITH 4')
   ]);
 };

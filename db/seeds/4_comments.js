@@ -48,7 +48,8 @@ exports.seed = function(knex, Promise) {
       message: "Wow, what a great resource!",
       user_id: 3,
       resource_id: 4,
-    })
+    }),
+    knex.raw('ALTER SEQUENCE comments_id_seq RESTART WITH 9')
   ]);
 };
 

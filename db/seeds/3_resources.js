@@ -32,6 +32,7 @@ exports.seed = function(knex, Promise) {
       description: 'A video about the fundamentals of engineering.',
       user_id: 1,
       topic_id: 3
-    })
+    }),
+    knex.raw('ALTER SEQUENCE resources_id_seq RESTART WITH 5')
   ]);
 };
