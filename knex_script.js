@@ -13,28 +13,16 @@ const knex = require('knex')({
     ssl      : process.env.DB_SSL
   },
 });
-// const test = async function (resource_id) {
-//   return await
-//   knex('ratings').avg('stars')
-//   .where('resource_id', resource_id)
-//   .then((result) => {return result[0].avg});
-// };
-
-// (async function() {
-//   console.log(await test(2));
-// }());
-
-const test2 = async function (stars, user_id, resource_id) {
+const test = async function (user_id, resource_id) {
   return await
-  knex('ratings').insert({
-    stars,
-    user_id,
-    resource_id,
-  });
+  knex('likes')
+  .where('user_id', user_id)
+  .andWhere('resource_id', resource_id)
+  .del()
 };
 
 (async function() {
-  console.log(await test2(1, 1, 2));
+  console.log(await test(1, 3));
 }());
 
 // async function getProfile2(user_id) {
@@ -228,12 +216,29 @@ module.exports = function makeDataHelpers(knex) {
       .where('resource_id', resource_id);   ////unsorted still
     },
 
+    checkLike: async (user_id, resource_id) => {
+      return await
+      knex('likes')
+      .count('created_at')
+      .where('user_id', user_id)
+      .andWhere('resource_id', resource_id)
+      .then((result) => {return result[0].count === '1'});
+    },
+
     createLike: async (user_id, resource_id) => {
       return await
       knex('likes').insert({
         user_id,
         resource_id,
       });
+    },
+
+    deleteLike: async (user_id, resource_id) => {
+      return await
+      knex('likes')
+      .where('user_id', user_id)
+      .andWhere('resource_id', resource_id)
+      .del()
     },
 
     createRating: async (stars, user_id, resource_id) => {
