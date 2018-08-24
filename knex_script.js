@@ -215,12 +215,18 @@ module.exports = function makeDataHelpers(knex) {
       .update({stars});
     },
 
-    getAverageRating: async (resource_id) => {
+    updateAverageRating: async (resource_id) => {
       return await
       knex('ratings').avg('stars')
       .where('resource_id', resource_id)
-      .then((result) => {return result[0].avg});
-    },
+      .then((result) => {return result[0].avg})
+      .then(async (avg_rating) => {
+        return await
+        knex('resources')
+        .where('id', resource_id)
+        .update({average_rating: avg_rating});
+      })
+    }
 
   };
 }

@@ -1,3 +1,5 @@
+'use strict'
+
 require('dotenv').config();
 
 const knex = require('knex')({
@@ -12,14 +14,19 @@ const knex = require('knex')({
   },
 });
 
-const test = async function (stars, user_id, resource_id) {
+const test = async function (resource_id) {
   return await
-  knex('ratings')
-  .where('user_id', user_id)
-  .andWhere('resource_id', resource_id)
-  .update({stars});
+  knex('ratings').avg('stars')
+  .where('resource_id', resource_id)
+  .then((result) => {return result[0].avg})
+  .then(async (avg_rating) => {
+    return await
+    knex('resources')
+    .where('id', resource_id)
+    .update({average_rating: avg_rating});
+  })
 };
 
 (async function() {
-  console.log(await test(4, 1, 1));
+  console.log(await test(4));
 }());
