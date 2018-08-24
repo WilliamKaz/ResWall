@@ -1,57 +1,5 @@
 "use strict";
 
-require('dotenv').config();
-
-const knex = require('knex')({
-  client: 'postgresql',
-  connection: {
-    host     : process.env.DB_HOST,
-    user     : process.env.DB_USER,
-    password : process.env.DB_PASS,
-    database : process.env.DB_NAME,
-    port     : process.env.DB_PORT,
-    ssl      : process.env.DB_SSL
-  },
-});
-const test = async function (user_id, resource_id) {
-  return await
-  knex('likes')
-  .where('user_id', user_id)
-  .andWhere('resource_id', resource_id)
-  .del()
-};
-
-(async function() {
-  console.log(await test(1, 3));
-}());
-
-// async function getProfile2(user_id) {
-//   return await knex.select('username', 'bio').from('users')
-//   .where('id', user_id)
-//   .then((result) => {return (result[0])})
-// }
-
-// (async function() {
-//   const p = await getProfile2(2);
-//   console.log(p);
-// }())
-// .then(()=>{});
-// const createUser = async (username, password, email, bio) => {
-//   return await knex('users').insert({
-//     username,
-//     password,
-//     email,
-//     bio
-//   })
-// }
-
-// (async function() {
-//   const p = await createUser('bordan', '123', 'bordan@email.com', 'this is a bio');
-//   console.log(p);
-// }())
-
-
-
 module.exports = function makeDataHelpers(knex) {
   return {
 
@@ -216,7 +164,7 @@ module.exports = function makeDataHelpers(knex) {
       .where('resource_id', resource_id);   ////unsorted still
     },
 
-    checkLike: async (user_id, resource_id) => {
+    checkLikeExists: async (user_id, resource_id) => {
       return await
       knex('likes')
       .count('created_at')
@@ -241,6 +189,15 @@ module.exports = function makeDataHelpers(knex) {
       .del()
     },
 
+    checkRatingExists: async (user_id, resource_id) => {
+      return await
+      knex('ratings')
+      .count('stars')
+      .where('user_id', user_id)
+      .andWhere('resource_id', resource_id)
+      .then((result) => {return result[0].count === '1'});
+    },
+
     createRating: async (stars, user_id, resource_id) => {
       return await
       knex('ratings').insert({
@@ -248,6 +205,14 @@ module.exports = function makeDataHelpers(knex) {
         user_id,
         resource_id,
       });
+    },
+
+    updateRating: async (stars, user_id, resource_id) => {
+      return await
+      knex('ratings')
+      .where('user_id', user_id)
+      .andWhere('resource_id', resource_id)
+      .update({stars});
     },
 
     getAverageRating: async (resource_id) => {
