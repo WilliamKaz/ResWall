@@ -44,7 +44,7 @@ app.use(express.static("public"));
 // cookie session
 app.use(cookieSession({
   name: 'session',
-  keys: ['user_id']
+  keys: ['userId']
 }));
 
 // Mount all resource routes
@@ -55,9 +55,15 @@ app.use("/resources", resourcesRoutes());
 app.use("/users", usersRoutes());
 
 // Home page
-app.get("/", (req, res) => {
-  // const resource = getAllResources();
-  res.render("index");
+app.get("/", async (req, res) => {
+  const resource = await getAllResources();
+ 
+  for (post of resource) {
+    let averageRating = await getAverageRating(resource[post].id);
+    resource[post].averageRating = averageRating;
+  }
+
+  res.render("index", resource);
 });
 
 app.listen(PORT, () => {
