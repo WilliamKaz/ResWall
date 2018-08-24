@@ -3,7 +3,7 @@ exports.seed = function(knex, Promise) {
   return Promise.all([
     knex('resources').insert({
       id: 1,
-      url: 'http://www.musicresource.com',
+      url: 'http://www.wikipedia.com',
       title: 'Music Resource',
       description: 'A site of tutorials where you can learn about music.',
       user_id: 3,
@@ -12,7 +12,7 @@ exports.seed = function(knex, Promise) {
     }),
     knex('resources').insert({
       id: 2,
-      url: 'http://www.healthandwellness.com',
+      url: 'http://www.google.com',
       title: 'Health and Wellness blog',
       description: 'A blog about health and wellness',
       user_id: 1,
@@ -21,7 +21,7 @@ exports.seed = function(knex, Promise) {
     }),
     knex('resources').insert({
       id: 3,
-      url: 'http://www.writersblog.com',
+      url: 'http://www.ign.com',
       title: 'Writer\'s Blog',
       description: 'A blog all about writing.',
       user_id: 2,
@@ -30,7 +30,7 @@ exports.seed = function(knex, Promise) {
     }),
     knex('resources').insert({
       id: 4,
-      url: 'http://www.youtube.com/engineeringvideo',
+      url: 'http://www.gamespot.com',
       title: 'Engineering 101',
       description: 'A video about the fundamentals of engineering.',
       user_id: 1,
