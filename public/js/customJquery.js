@@ -16,10 +16,11 @@ $('body').on('click','.commentSubmit', function(e) {
   $('.commentInput').val('');
 });
 
-   // code sourced from https://codepen.io/neilpomerleau/pen/wzxzQr
-   // logs status of star rating
+// code sourced from https://codepen.io/neilpomerleau/pen/wzxzQr
+// logs status of star rating
 $(':radio').onChange(function() {
   console.log('New star rating: ' + this.value);
 });
 
 
+ // cool
