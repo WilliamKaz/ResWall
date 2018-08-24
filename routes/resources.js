@@ -8,13 +8,8 @@ module.exports = (knex) => {
 
   // if no query string, redirect to the home page, else render search page with results
   router.get("/", async (req, res) => {
-    if (req.query.keyword = undefined) {
-      res.redirect("index");
-    } else {
-      const searchTerm = req.query.keyword;
-      const searchResult = await db.searchResources(searchTerm);
-      res.render("search_result", searchResult);
-    }
+    const resources = await db.getAllResources();
+    res.json(resources);
   });
 
   // render the create resource page

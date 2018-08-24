@@ -48,7 +48,6 @@ app.use(cookieSession({
   keys: ['userId']
 }));
 
-// // Mount all resource routes
 app.use("/", homeRoutes(knex));
 app.use("/login", loginRoutes(knex));
 app.use("/logout", logoutRoutes(knex));
