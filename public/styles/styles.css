@@ -352,6 +352,9 @@ h1, h2, h3, h4, h5 {
     padding: 5px 3px;
     margin: 0; } }
 
+.hide, .commentContainer {
+  display: none; }
+
 .thumbnail-container {
   position: relative;
   border: 1px solid rgba(0, 0, 0, 0.1);
