@@ -79,7 +79,11 @@ module.exports = (knex) => {
   router.post("/:id/like", async (req, res) => {
     const userId = req.session.userId;
     const resourceId = req.params.id;
-    await toggleLike(userId, resourceId);
+    if (await db.checkLikeExists(userId, resourceId)){
+      await db.deleteLike(userId, resourceId);
+    } else {
+      await db.createLike(userId, resourceId);
+    }
     res.redirect("index");
   });
 
@@ -87,9 +91,14 @@ module.exports = (knex) => {
     const userId = req.session.userId;
     const resourceId = req.params.id;
     const stars = req.body.stars;
-    await createOrUpdateRating(stars, userId, resourceId);
+    if (await db.checkRatingExists(userId, resourceId)) {
+      await db.updateRating(stars, userId, resourceId);
+    } else {
+      await db.createRating(stars, userId, resourceId);
+    }
+    await db.updateAverageRating(resourceId);
     res.redirect("index");
   });
-  
+
   return router;
 }
