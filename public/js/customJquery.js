@@ -18,7 +18,7 @@ $('body').on('click','.commentSubmit', function(e) {
 
    // code sourced from https://codepen.io/neilpomerleau/pen/wzxzQr
    // logs status of star rating
-$('body').on('change',':radio',(function() {
+$(':radio').onChange(function() {
   console.log('New star rating: ' + this.value);
 });
 
