@@ -164,7 +164,7 @@ module.exports = function makeDataHelpers(knex) {
       .where('resource_id', resource_id);   ////unsorted still
     },
 
-    checkLikeExists: async (user_id, resource_id) => {
+    likeExists: async (user_id, resource_id) => {
       return await
       knex('likes')
       .count('created_at')
@@ -189,7 +189,7 @@ module.exports = function makeDataHelpers(knex) {
       .del()
     },
 
-    checkRatingExists: async (user_id, resource_id) => {
+    ratingExists: async (user_id, resource_id) => {
       return await
       knex('ratings')
       .count('stars')
