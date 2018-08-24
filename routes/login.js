@@ -3,7 +3,8 @@
 const express = require('express');
 const router = express.Router();
 
-module.exports = () => {
+module.exports = (knex) => {
+  const db = require('../db/dbHelpers')(knex);
   // render the login page
   router.get("/", (req, res) => {
     res.render("login");
@@ -12,11 +13,10 @@ module.exports = () => {
   // submit login form
   router.post("/", async (req, res) => {
     const email = req.body.email;
-    // const password = req.body.password;
-    const userId = await getUserId(email);
+    const userId = await db.getUserId(email);
 
-    // check email and pw against db
-    if (await checkCredentials(email) === true) {
+    // check email against db
+    if (await db.checkCredentials(email) === true) {
       // set cookie and redirect to home page
       req.session.userId = userId;
       res.redirect("index");
