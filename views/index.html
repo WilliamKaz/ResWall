@@ -14,50 +14,63 @@
     <link href="https://fonts.googleapis.com/css?family=Concert+One|Montserrat" rel="stylesheet">
     <!-- jq -->
     <script
-  src="https://code.jquery.com/jquery-3.3.1.js"
-  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-  crossorigin="anonymous"></script>
+    src="https://code.jquery.com/jquery-3.3.1.js"
+    integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
     <!-- custom style sheet -->
-    <link rel="stylesheet" type="text/css" href="../styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../public/styles/styles.css">
   </head>
   <body>
-
     <main>
       <div class="wrapper">
-        <!-- post container -->
+        <!-- post container begins -->
         <div class="postContainer">
           <!-- post template -->
           <div class="post">
             <h3 class="postTitle">Post 1</h3>
-            <img src="https://julianvasquezheilig.files.wordpress.com/2013/12/sneak-preview.jpg" alt="">
-            <div class="postLikes">
-            </div>
-            <div class="postContent">
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam tenetur temporibus quia porro, sit dolorem delectus laborum sunt voluptas quod, deserunt labore voluptate, quo dolores, repellendus iste consequatur quas laboriosam.</p>
-            </div>
-            <div class="postFooter">
-              <div class="controls clearfix">
-                <p class="show">Show Comments</p>
-                <p class="hide">Hide Comments</p>
-              </div>
-              <div class="commentContainer">
-                <div class="commentForm">
-                <form action="">
-                  <label for=""></label>
-                  <textarea class="commentInput" name="" id="" cols="30" rows="10"></textarea></form>
-              </div>
-
-                <div class="comment">
-                  <h4>usern@@</h4>
-                  <p class="commentText">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto natus perferendis neque quibusdam consectetur earum voluptatibus quia suscipit nulla ipsum sapiente praesentium cum ad veritatis nemo tempore eos mollitia, aliquam, libero sequi blanditiis unde adipisci ratione ipsam reprehenderit. Sed, recusandae.</p>
+            <!-- img preview -->
+            <a href="https://designcode.io/">
+              <div class="thumbnail-container" >
+                <div class="thumbnail">
+                  <iframe src="https://designcode.io/" frameborder="0" onload="this.style.opacity = 1"></iframe>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="post">
-            <h3 class="postTitle">Post 1</h3>
-            <img src="https://julianvasquezheilig.files.wordpress.com/2013/12/sneak-preview.jpg" alt="">
+            </a>
+            <!-- /image preview -->
+            <!-- radio know star code from  https://codepen.io/neilpomerleau/pen/wzxzQr -->
             <div class="postLikes">
+              <form class="rating">
+                <label>
+                  <input type="radio" name="stars" value="1" />
+                  <span class="icon">★</span>
+                </label>
+                <label>
+                  <input type="radio" name="stars" value="2" />
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                </label>
+                <label>
+                  <input type="radio" name="stars" value="3" />
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                </label>
+                <label>
+                  <input type="radio" name="stars" value="4" />
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                </label>
+                <label>
+                  <input type="radio" name="stars" value="5" />
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                  <span class="icon">★</span>
+                </label>
+              </form>
             </div>
             <div class="postContent">
               <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam tenetur temporibus quia porro, sit dolorem delectus laborum sunt voluptas quod, deserunt labore voluptate, quo dolores, repellendus iste consequatur quas laboriosam.</p>
@@ -69,11 +82,12 @@
               </div>
               <div class="commentContainer">
                 <div class="commentForm">
-                <form action="">
-                  <label for=""></label>
-                  <textarea class="commentInput" name="" id="" cols="30" rows="10"></textarea></form>
-              </div>
-
+                  <form method="POST" action="id:/comment">
+                    <small> Comment box</small>
+                    <textarea class="commentInput" name="" id="" cols="30" rows="10"></textarea>
+                    <button type="submit" class="btn btn-primary">submit comment</button>
+                  </form>
+                </div>
                 <div class="comment">
                   <h4>username</h4>
                   <p class="commentText">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto natus perferendis neque quibusdam consectetur earum voluptatibus quia suscipit nulla ipsum sapiente praesentium cum ad veritatis nemo tempore eos mollitia, aliquam, libero sequi blanditiis unde adipisci ratione ipsam reprehenderit. Sed, recusandae.</p>
@@ -81,15 +95,15 @@
               </div>
             </div>
           </div>
+          <!--container body ends -->
         </div>
       </div>
     </main>
     <footer>
     </footer>
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="../js/customJquery.js"></script>
+    <script src="../public/js/customJquery.js"></script>
   </body>
 </html>

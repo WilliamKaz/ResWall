@@ -3,7 +3,6 @@ $(function() {
   $(".hide").hide();
 
 
-  // });
   $('.show').on('click', function() {
     $(this).closest('.post').find('.hide').toggle();
     $(this).closest('.post').find('.show').toggle();
@@ -15,6 +14,14 @@ $(function() {
     $(this).closest('.post').find('.hide').toggle();
     $(this).closest('.post').find(".commentContainer").slideUp();
 });
+
+   // code sourced from https://codepen.io/neilpomerleau/pen/wzxzQr
+   // logs status of star rating
+  $(':radio').change(function() {
+    console.log('New star rating: ' + this.value);
+  });
+
+
 
 });
 

@@ -18,16 +18,20 @@
   integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
   crossorigin="anonymous"></script>
     <!-- custom style sheet -->
-    <link rel="stylesheet" type="text/css" href="../styles/styles.css">
+    <link rel="stylesheet" type="text/css" href="../public/styles/styles.css">
   </head>
   <body>
-    <%- include('partials/header') %>
 
+   <%- include ./partials/_header %>
     <main>
+
+      <%- include ./partials/_userBio %>
+    <!-- delete html above add ejs partial -->
       <div class="wrapper">
-        <!-- post container -->
-        <div class="mypostContainer">
-          <!-- post template -->
+        <!--  container -->
+        <div class="likesContainer">
+
+
 
         </div>
       </div>
@@ -38,6 +42,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="../js/customJquery.js"></script>
+    <script src="../public/js/customJquery.js"></script>
   </body>
 </html>
