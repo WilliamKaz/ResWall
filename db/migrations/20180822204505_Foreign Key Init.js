@@ -1,5 +1,5 @@
 
-exports.up = function(knex, Promise) {
+exports.up = (knex, Promise) => {
   return Promise.all([
     knex.schema.table('resources', function (table) {
       table.foreign('user_id').references('users.id');
@@ -20,7 +20,7 @@ exports.up = function(knex, Promise) {
   ])
 };
 
-exports.down = function(knex, Promise) {
+exports.down = (knex, Promise) => {
   return Promise.all([
     knex.schema.table('resources', function (table) {
       table.dropForeign('user_id');

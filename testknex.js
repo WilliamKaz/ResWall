@@ -14,19 +14,22 @@ const knex = require('knex')({
   },
 });
 
-const test = async function (resource_id) {
-  return await
-  knex('ratings').avg('stars')
-  .where('resource_id', resource_id)
-  .then((result) => {return result[0].avg})
-  .then(async (avg_rating) => {
-    return await
-    knex('resources')
-    .where('id', resource_id)
-    .update({average_rating: avg_rating});
-  })
-};
+const helper = require('./knex_script.js')(knex);
+helper.createUser('userj','passj','jmail','jio');
 
-(async function() {
-  console.log(await test(4));
-}());
+// const test = async function (resource_id) {
+//   return await
+//   knex('ratings').avg('stars')
+//   .where('resource_id', resource_id)
+//   .then((result) => {return result[0].avg})
+//   .then(async (avg_rating) => {
+//     return await
+//     knex('resources')
+//     .where('id', resource_id)
+//     .update({average_rating: avg_rating});
+//   })
+// };
+
+// (async function() {
+//   console.log(await test(4));
+// }());
