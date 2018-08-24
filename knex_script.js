@@ -13,32 +13,29 @@ const knex = require('knex')({
     ssl      : process.env.DB_SSL
   },
 });
-const test = async function (query) {
+// const test = async function (resource_id) {
+//   return await
+//   knex('ratings').avg('stars')
+//   .where('resource_id', resource_id)
+//   .then((result) => {return result[0].avg});
+// };
+
+// (async function() {
+//   console.log(await test(2));
+// }());
+
+const test2 = async function (stars, user_id, resource_id) {
   return await
-  knex.select('resources.id').from('resources')
-  .join('users', 'users.id', '=', 'resources.user_id')
-  .join('topics', 'topics.id', '=', 'resources.topic_id')
-  .where('username', 'ilike', query)
-  .orWhere('topics.name', 'ilike', query)
-  .orWhere('resources.title', 'ilike', query)
-  .then((result) => {
-    const idArray = [];
-    result.forEach((object) => {
-      idArray.push(object.id);
-    })
-    return idArray;
-  })
-  .then(async (idArr) => {
-    return await
-    knex.select().from('resources')
-    .whereIn('id', idArr)               ////unsorted still
-  })
+  knex('ratings').insert({
+    stars,
+    user_id,
+    resource_id,
+  });
 };
 
 (async function() {
-  console.log(await test('alice'));
+  console.log(await test2(1, 1, 2));
 }());
-
 
 // async function getProfile2(user_id) {
 //   return await knex.select('username', 'bio').from('users')
@@ -166,6 +163,7 @@ module.exports = function makeDataHelpers(knex) {
         .then((num) => {console.log(num, 'comments deleted')}),
       ]);
 
+      //might need return await if i get rid of console.logs
       foreigns.then((result) => {
         knex('resources')
         .where('id', resource_id)
@@ -213,7 +211,46 @@ module.exports = function makeDataHelpers(knex) {
         knex.select().from('resources')
         .whereIn('id', idArr)               ////unsorted still
       })
-    }
+    },
+
+    createComment: async (message, user_id, resource_id) => {
+      return await
+      knex('comments').insert({
+        message,
+        user_id,
+        resource_id,
+      });
+    },
+
+    getComments: async (resource_id) => {
+      return await
+      knex.select().from('comments')
+      .where('resource_id', resource_id);   ////unsorted still
+    },
+
+    createLike: async (user_id, resource_id) => {
+      return await
+      knex('likes').insert({
+        user_id,
+        resource_id,
+      });
+    },
+
+    createRating: async (stars, user_id, resource_id) => {
+      return await
+      knex('ratings').insert({
+        stars,
+        user_id,
+        resource_id,
+      });
+    },
+
+    getAverageRating: async (resource_id) => {
+      return await
+      knex('ratings').avg('stars')
+      .where('resource_id', resource_id)
+      .then((result) => {return result[0].avg});
+    },
 
   };
 }
