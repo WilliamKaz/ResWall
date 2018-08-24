@@ -1,6 +1,11 @@
 $(function() {
-  $(".commentContainer").hide();
-  $(".hide").hide();
+
+
+
+
+
+}
+);
 
 
   $('.show').on('click', function() {
@@ -29,8 +34,4 @@ $(function() {
     console.log('New star rating: ' + this.value);
   });
 
-
-
-
-});
 
