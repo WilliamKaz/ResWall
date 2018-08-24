@@ -14,7 +14,7 @@ const knex = require('knex')({
   },
 });
 
-const helper = require('./knex_script.js')(knex);
+const helper = require('./db/dbHelpers.js')(knex);
 helper.createUser('userj','passj','jmail','jio');
 
 // const test = async function (resource_id) {

@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (knex) => {
+  const db = require('../db/dbHelpers')(knex);
 
   // if no query string, redirect to the home page, else render search page with results
   router.get("/", async (req, res) => {
@@ -11,7 +12,7 @@ module.exports = (knex) => {
       res.redirect("index");
     } else {
       const searchTerm = req.query.keyword;
-      const searchResult = await searchResources(searchTerm);
+      const searchResult = await db.searchResources(searchTerm);
       res.render("search_result", searchResult);
     }
   });
@@ -29,14 +30,14 @@ module.exports = (knex) => {
     const userId = req.session.userId;
     const topicId = req.body.topic;
 
-    await createResource(url, title, description, userId, topicId);
+    await db.createResource(url, title, description, userId, topicId);
     res.redirect("index");
   });
 
   // render the edit resource page
   router.get("/:id", async (req, res) => {
     const resourceId = req.params.id;
-    const resource = await getResource(resourceId);
+    const resource = await db.getResource(resourceId);
     res.render("resource", resource);
   });
 
@@ -47,22 +48,22 @@ module.exports = (knex) => {
     const title = req.body.title;
     const description = req.body.description;
     const topicId = req.body.topicid;
-    await updateResource(resourceId, url, title, description, topicId);
-    const resource = await getResource(resource_id);
+    await db.updateResource(resourceId, url, title, description, topicId);
+    const resource = await db.getResource(resource_id);
     res.render("resource", resource);
   });
 
   // delete resource and redirect to the home page
   router.delete("/:id", async (req, res) => {
     const resourceId = req.params.id;
-    await deleteResource(resourceId)
+    await db.deleteResource(resourceId);
     res.redirect("index");
   });
 
   // display all comments
   router.get("/:id/comments", async (req, res) => {
     const resourceId = req.params.id;
-    const comments = await getComments(resourceId);
+    const comments = await db.getComments(resourceId);
     res.render("index", comments);
   });
 
@@ -71,8 +72,8 @@ module.exports = (knex) => {
     const resourceId = req.params.id;
     const userId = req.session.userId;
     const message = req.body.message;
-    await createComment(message, userId, resourceId);
-    const comments = await getComments(resourceId);
+    await db.createComment(message, userId, resourceId);
+    const comments = await db.getComments(resourceId);
     res.render("index", comments);
   });
 
