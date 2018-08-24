@@ -4,7 +4,8 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 
-module.exports = () => {
+module.exports = (knex) => {
+  const db = require('../db/dbHelpers')(knex);
 
   // render the registration page
   router.get("/", (req, res) => {
@@ -13,17 +14,17 @@ module.exports = () => {
 
   // submit registration form
   // add user information to database, set cookie, redirect to home page
-  router.post("/", (req, res) => {
-    const username = req.body.username;
+  router.post("/", async (req, res) => {
+    const userName = req.body.username;
     const password = bcrypt.hashSync(req.body.password, 10);
     const email = req.body.email;
     const bio = req.body.bio;
 
     // create user in db and get the user id
-    createUser(username, password, email, bio);
-    const user_id = getUserId(email);
+    await db.createUser(userName, password, email, bio);
+    const userId = await db.getUserId(email);
 
-    req.session.user_id = user_id;
+    req.session.userId = userId;
     res.redirect("index");
   });
 

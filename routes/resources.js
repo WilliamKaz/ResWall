@@ -4,77 +4,102 @@ const express = require('express');
 const router = express.Router();
 
 module.exports = (knex) => {
+  const db = require('../db/dbHelpers')(knex);
 
   // if no query string, redirect to the home page, else render search page with results
-  router.get("/", (req, res) => {
-    if (req.query.keyword = '') {
+  router.get("/", async (req, res) => {
+    if (req.query.keyword = undefined) {
       res.redirect("index");
     } else {
       const searchTerm = req.query.keyword;
-      const searchResult = searchResources(searchTerm);
+      const searchResult = await db.searchResources(searchTerm);
       res.render("search_result", searchResult);
     }
   });
 
   // render the create resource page
   router.get("/new", (req, res) => {
-    res.render("resources_new");
+    res.render("postForm");
   });
 
   // submit the create resource form
-  router.post("/new", (req, res) => {
-    const url = req.body.url;
+  router.post("/new", async (req, res) => {
+    const url = req.body.resURL;
     const title = req.body.title;
     const description = req.body.description;
-    const user_id = req.session.user_id;
-    const topic_id = req.session.topic_id;
+    const userId = req.session.userId;
+    const topicId = req.body.topic;
 
-    createResource(url, title, description, user_id, topic_id);
+    await db.createResource(url, title, description, userId, topicId);
     res.redirect("index");
   });
 
   // render the edit resource page
-  router.get("/:id", (req, res) => {
-    const resource_id = req.params.id;
-    const resource = getResource(resource_id);
+  router.get("/:id", async (req, res) => {
+    const resourceId = req.params.id;
+    const resource = await db.getResource(resourceId);
     res.render("resource", resource);
   });
 
   // submit the edit resource form
-  router.put("/:id", (req, res) => {
-    const resource_id = req.params.id;
+  router.put("/:id", async (req, res) => {
+    const resourceId = req.params.id;
     const url = req.body.url;
     const title = req.body.title;
     const description = req.body.description;
-    const topic_id = req.body.topic_id;
-    updateResource(resourceId, url, title, description, topic_id);
-    const resource = getResource(resource_id);
+    const topicId = req.body.topicid;
+    await db.updateResource(resourceId, url, title, description, topicId);
+    const resource = await db.getResource(resource_id);
     res.render("resource", resource);
   });
 
   // delete resource and redirect to the home page
-  router.delete("/:id", (req, res) => {
-    const resource_id = req.params.id;
-    deleteResource(resource_id)
+  router.delete("/:id", async (req, res) => {
+    const resourceId = req.params.id;
+    await db.deleteResource(resourceId);
     res.redirect("index");
   });
 
   // display all comments
-  router.get("/:id/comments", (req, res) => {
-    const resource_id = req.params.id;
-    const comments = getComments(resource_id);
+  router.get("/:id/comments", async (req, res) => {
+    const resourceId = req.params.id;
+    const comments = await db.getComments(resourceId);
     res.render("index", comments);
   });
 
   // submit comment
-  router.post("/:id/comments", (req, res) => {
-    const resource_id = req.params.id;
-    const user_id = req.session.user_id;
+  router.post("/:id/comments", async (req, res) => {
+    const resourceId = req.params.id;
+    const userId = req.session.userId;
     const message = req.body.message;
-    createComment(message, user_id, resource_id);
-    const comments = getComments(resource_id);
+    await db.createComment(message, userId, resourceId);
+    const comments = await db.getComments(resourceId);
     res.render("index", comments);
   });
-  
+
+  router.post("/:id/like", async (req, res) => {
+    const userId = req.session.userId;
+    const resourceId = req.params.id;
+    if (await db.likeExists(userId, resourceId)){
+      await db.deleteLike(userId, resourceId);
+    } else {
+      await db.createLike(userId, resourceId);
+    }
+    res.redirect("index");
+  });
+
+  router.post("/:id/rate", async (req, res) => {
+    const userId = req.session.userId;
+    const resourceId = req.params.id;
+    const stars = req.body.stars;
+    if (await db.ratingExists(userId, resourceId)) {
+      await db.updateRating(stars, userId, resourceId);
+    } else {
+      await db.createRating(stars, userId, resourceId);
+    }
+    await db.updateAverageRating(resourceId);
+    res.redirect("index");
+  });
+
   return router;
 }
